@@ -1,0 +1,61 @@
+=================================
+ES6 JavaScript Promise的感性认知
+http://www.zhangxinxu.com/wordpress/2014/02/es6-javascript-promise-%E6%84%9F%E6%80%A7%E8%AE%A4%E7%9F%A5/
+=================================
+https://davidwalsh.name/arguments-array
+=================================
+=================================
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function*
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator
+=================================
+七天学会NodeJS
+http://nqdeng.github.io/7-days-nodejs
+=================================
+koa 无法提示
+/**
+ * @typedef {Application} app
+ */
+
+或者
+
+var app = module.exports = koa();
+=================================
+var n = ~~this.cookies.get('view', { signed: true }) + 1;
+http://james.padolsey.com/cool-stuff/double-bitwise-not/
+=================================
+yield*
+
+yield*后面跟的是一个可遍历的结构，它会调用该结构的遍历器接口。
+
+let generator = function* () {
+  yield 1;
+  yield* [2,3,4];
+  yield 5;
+};
+
+var iterator = generator();
+
+iterator.next() // { value: 1, done: false }
+iterator.next() // { value: 2, done: false }
+iterator.next() // { value: 3, done: false }
+iterator.next() // { value: 4, done: false }
+iterator.next() // { value: 5, done: false }
+iterator.next() // { value: undefined, done: true }
+=================================
+为了在外部模块调用app.js, 首先需要禁止服务器自动启动。修改app.js,在 app.listen
+(3000); 前后加上判断语句:
+if (!module.parent) {
+  app.listen(3000);
+  console.log("Express server listening on port %d in %s mode", app.address().port,
+  app.settings.env);
+}
+这个语句的功能是判断当前模块是不是由其他模块调用的,如果不是,说明它是直接启
+动的,此时启动调试服务器;如果是,则不自动启动服务器。经过这样的修改,以后直接调
+用 node app.js 服务器会直接运行,但在其他模块中调用 require('./app') 则不会自动
+启动,需要再显式地调用 listen() 函数。
+=================================
