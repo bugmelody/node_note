@@ -180,6 +180,8 @@ Obj.prototype[Symbol.iterator] = function(){
   var current = this;
 
   function next(){
+    // current 是什么?
+    console.log('current'); console.log(current);
     if (current){
       var value = current.value;
       var done = current == null;
