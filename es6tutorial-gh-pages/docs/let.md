@@ -1,3 +1,4 @@
+qc:1
 # let和const命令
 
 ## let命令

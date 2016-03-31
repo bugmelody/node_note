@@ -1,3 +1,4 @@
+qc: 1
 # Iterator和for...of循环
 
 ## Iterator（遍历器）的概念

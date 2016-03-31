@@ -1,3 +1,4 @@
+qc:1
 # Generator 函数
 
 ## 简介
@@ -69,7 +70,7 @@ function*foo(x, y) { ··· }
 由于Generator函数仍然是普通函数，所以一般的写法是上面的第三种，即星号紧跟在`function`关键字后面。本书也采用这种写法。
 
 ### yield语句
-
+到此
 由于Generator函数返回的遍历器对象，只有调用`next`方法才会遍历下一个内部状态，所以其实提供了一种可以暂停执行的函数。`yield`语句就是暂停标志。
 
 遍历器对象的`next`方法的运行逻辑如下。
@@ -206,17 +207,24 @@ g[Symbol.iterator]() === g
 
 ```javascript
 function* f() {
-  for(var i=0; true; i++) {
-    var reset = yield i;
-    if(reset) { i = -1; }
-  }
+    for (var i = 0; true; i++) {
+        console.log('a');
+        var reset = yield i;
+        console.log('b');
+        if (reset) {
+            console.log('c');
+            i = -1;
+            console.log('d');
+        }
+        console.log('e');
+    }
 }
 
 var g = f();
-
-g.next() // { value: 0, done: false }
-g.next() // { value: 1, done: false }
-g.next(true) // { value: 0, done: false }
+console.log(g.next());
+console.log(g.next());
+console.log(g.next(true));
+console.log(g.next(true));
 ```
 
 上面代码先定义了一个可以无限运行的Generator函数`f`，如果`next`方法没有参数，每次运行到`yield`语句，变量`reset`的值总是`undefined`。当`next`方法带一个参数`true`时，当前的变量`reset`就被重置为这个参数（即`true`），因此`i`会等于-1，下一轮循环就会从-1开始递增。
@@ -406,22 +414,37 @@ Generator函数返回的遍历器对象，都有一个`throw`方法，可以在�
 
 ```javascript
 var g = function* () {
+  console.log(1);
   try {
+    console.log(2);
     yield;
+    console.log('不会运行到这里');
   } catch (e) {
+    console.log(5);
     console.log('内部捕获', e);
+    console.log(6);
   }
 };
 
 var i = g();
+console.log(0);
 i.next();
+console.log(3);
 
 try {
+  console.log(4);
   i.throw('a');
+  console.log(7);
   i.throw('b');
+  console.log('不会运行到这里');
 } catch (e) {
+  console.log(8);
   console.log('外部捕获', e);
+  console.log(9);
 }
+
+console.log(10);
+
 // 内部捕获 a
 // 外部捕获 b
 ```
@@ -436,6 +459,7 @@ var g = function* () {
     try {
       yield;
     } catch (e) {
+      console.log('====不会运行到这里');
       if (e != 'a') throw e;
       console.log('内部捕获', e);
     }
@@ -451,7 +475,6 @@ try {
 } catch (e) {
   console.log('外部捕获', e);
 }
-// 外部捕获 [Error: a]
 ```
 
 上面代码之所以只捕获了`a`，是因为函数体外的`catch`语句块，捕获了抛出的`a`错误以后，就不会再继续`try`代码块里面剩余的语句了。
@@ -461,8 +484,9 @@ try {
 ```javascript
 var g = function* () {
   while (true) {
+    console.log('===x');
     yield;
-    console.log('内部捕获', e);
+    console.log('===y');
   }
 };
 
@@ -475,7 +499,14 @@ try {
 } catch (e) {
   console.log('外部捕获', e);
 }
-// 外部捕获 a
+
+i.next(); // 这里实际上并不会进行推进
+try {
+  i.throw('c');
+  i.throw('d');
+} catch (e) {
+  console.log('外部捕获', e);
+}
 ```
 
 上面代码中，遍历器函数`g`内部没有部署`try...catch`代码块，所以抛出的错误直接被外部`catch`代码块捕获。
@@ -578,8 +609,12 @@ it.next(); // { value:3, done:false }
 try {
   it.next(42);
 } catch (err) {
+  console.log('==err:');
   console.log(err);
 }
+
+// ==err:
+// [TypeError: x.toUpperCase is not a function]
 ```
 
 上面代码中，第二个`next`方法向函数体内传入一个参数42，数值是没有`toUpperCase`方法的，所以会抛出一个TypeError错误，被函数体外的`catch`捕获。

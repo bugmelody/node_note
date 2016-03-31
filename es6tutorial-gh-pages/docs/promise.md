@@ -1,3 +1,4 @@
+qc:2
 # Promise对象
 
 ## Promise的含义
@@ -55,7 +56,9 @@ promise.then(function(value) {
 下面是一个Promise对象的简单例子。
 
 ```javascript
+// http://nodejs.cn/doc/node/all.html#all_settimeout_callback_delay_arg
 function timeout(ms) {
+  // 这是箭头函数的写法
   return new Promise((resolve, reject) => {
     setTimeout(resolve, ms, 'done');
   });
@@ -604,8 +607,9 @@ p.then(function (s){
 ```javascript
 var p = Promise.resolve();
 
-p.then(function () {
-  // ...
+p.then(function (a) {
+  console.log('=======');
+  console.log(a); // 输出: undefined
 });
 ```
 
@@ -727,16 +731,17 @@ function run (generator) {
   var it = generator();
 
   function go(result) {
-    if (result.done) return result.value;
+    if (result.done) return result.value; // generator 已经运行完毕
 
+    // 到这里,说明 generator 还未运行完毕, result.value 是一个 Promise,因此可以调用 then 方法
     return result.value.then(function (value) {
-      return go(it.next(value));
+      return go(it.next(value)); // 把结果传回 generator, 也就是上面的 var foo = yield getFoo(); ,这样 foo 就收到值了
     }, function (error) {
-      return go(it.throw(error));
+      return go(it.throw(error)); // 会被上面的catch补货
     });
   }
 
-  go(it.next());
+  go(it.next()); // it.next 返回的是一个 {value: Promise_Value, done: boolean } , 因为 yield getFoo() 生成的值是一个 Promise
 }
 
 run(g);
