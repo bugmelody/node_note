@@ -78,7 +78,7 @@ Array.from({ length: 3 });
 ```
 
 上面代码中，`Array.from`返回了一个具有三个成员的数组，每个位置的值都是`undefined`。扩展运算符转换不了这个对象。
-
+到此
 对于还没有部署该方法的浏览器，可以用`Array.prototype.slice`方法替代。
 
 ```javascript

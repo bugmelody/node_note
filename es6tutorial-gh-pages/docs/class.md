@@ -1,3 +1,4 @@
+qc: 1
 # Class
 
 ## Class基本语法
@@ -98,7 +99,7 @@ class Point {
     // ...
   }
 }
-
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 Object.assign(Point.prototype, {
   toString(){},
   toValue(){}
@@ -167,7 +168,6 @@ class Square{
 上面代码中，Square类的方法名getArea，是从表达式得到的。
 
 **（2）constructor方法**
-
 constructor方法是类的默认方法，通过new命令生成对象实例时，自动调用该方法。一个类必须有constructor方法，如果没有显式定义，一个空的constructor方法会被默认添加。
 
 ```javascript
@@ -460,6 +460,7 @@ class B {
 }
 
 // B的实例继承A的实例
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf
 Object.setPrototypeOf(B.prototype, A.prototype);
 
 // B继承A的静态属性

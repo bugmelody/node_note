@@ -1,4 +1,4 @@
-qc:1
+qc:2
 # 异步操作和Async函数
 
 异步编程对JavaScript语言太重要。Javascript语言的执行环境是“单线程”的，如果没有异步编程，根本没法用，非卡死不可。
@@ -301,9 +301,9 @@ var Thunk = function (fileName){
 
 ```javascript
 var Thunk = function(fn){
-  return function (){ // ret_func
-    var args = Array.prototype.slice.call(arguments); // 将 ret_func 函数的参数转化成一个数组
-    return function (callback){
+  return function (){ // ret_thunk_func
+    var args = Array.prototype.slice.call(arguments); // 将 ret_thunk_func 函数的参数转化成一个数组
+    return function (callback){  // ret_thunk_func 会返回一个单参数的函数,其参数是一个callback
       args.push(callback);
       return fn.apply(this, args);
     }
@@ -319,7 +319,7 @@ readFileThunk(fileA)(callback);
 ```
 
 ### Thunkify模块
-到此
+
 生产环境的转换器，建议使用Thunkify模块。
 
 首先是安装。
@@ -415,6 +415,7 @@ var gen = function* (){
 var g = gen();
 
 var r1 = g.next();
+// r1.value 是 Thunk 转换后返回的函数,之接受一个callback作为参数
 r1.value(function(err, data){
   if (err) throw err;
   var r2 = g.next(data);

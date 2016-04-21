@@ -1,4 +1,4 @@
-qc:1
+qc:2
 # Generator 函数
 
 ## 简介
@@ -70,7 +70,7 @@ function*foo(x, y) { ··· }
 由于Generator函数仍然是普通函数，所以一般的写法是上面的第三种，即星号紧跟在`function`关键字后面。本书也采用这种写法。
 
 ### yield语句
-到此
+
 由于Generator函数返回的遍历器对象，只有调用`next`方法才会遍历下一个内部状态，所以其实提供了一种可以暂停执行的函数。`yield`语句就是暂停标志。
 
 遍历器对象的`next`方法的运行逻辑如下。
@@ -370,6 +370,7 @@ for (let n of numbers()) {
 
 ```javascript
 function* objectEntries(obj) {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/ownKeys
   let propKeys = Reflect.ownKeys(obj);
 
   for (let propKey of propKeys) {
@@ -500,13 +501,16 @@ try {
   console.log('外部捕获', e);
 }
 
-i.next(); // 这里实际上并不会进行推进
+i.next(); // 这里实际上并不会进行推进, 不会有输出
 try {
   i.throw('c');
   i.throw('d');
 } catch (e) {
   console.log('外部捕获', e);
 }
+
+i.next(); // 这里实际上并不会进行推进, 不会有输出
+i.next(); // 这里实际上并不会进行推进, 不会有输出
 ```
 
 上面代码中，遍历器函数`g`内部没有部署`try...catch`代码块，所以抛出的错误直接被外部`catch`代码块捕获。
@@ -658,7 +662,7 @@ log(g());
 // starting generator
 // 第一次运行next方法 { value: 1, done: false }
 // throwing an exception
-// 捕捉错误 { value: 1, done: false }
+// 捕捉错误 { value: 1, done: false }                   //// 这是上一次的v值
 // 第三次运行next方法 { value: undefined, done: true }
 // caller done
 ```
